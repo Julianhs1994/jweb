@@ -30,7 +30,6 @@
     "express-session": "^1.18.0",
     "express-session-mysql": "^0.4.3",
     "jsonwebtoken": "^9.0.2",
-    "mysql-connection-manager": "^0.0.14",
     "mysql2": "^3.9.6",
     "nodemon": "^3.1.0",
     "timeout": "^0.2.1",
