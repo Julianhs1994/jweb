@@ -3,3 +3,15 @@
     background-size:auto;
     background-repeat: no-repeat;
 }
+
+.jumbotron{
+    height: 700px;
+}
+
+.text-center p{
+    background-color: yellow;
+}
+
+.text-muted{
+    color: black !important;
+}
