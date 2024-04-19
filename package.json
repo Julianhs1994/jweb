@@ -21,7 +21,7 @@
   "dependencies": {
     "bcrypt": "^5.1.1",
     "bcryptjs": "^2.4.3",
-    "connect-mysql-session": "^0.1.3",
+    "connect-mysql-session": "^0.1.1",
     "cookie-parser": "^1.4.6",
     "dotenv": "^16.4.5",
     "ejs": "^3.1.9",
@@ -30,9 +30,10 @@
     "express-session": "^1.18.0",
     "express-session-mysql": "^0.4.3",
     "jsonwebtoken": "^9.0.2",
+    "mysql-connection-manager": "^0.0.14",
     "mysql2": "^3.9.6",
     "nodemon": "^3.1.0",
     "timeout": "^0.2.1",
-    "vercel": "^34.1.1"
+    "vercel": "^32.3.0"
   }
 }
