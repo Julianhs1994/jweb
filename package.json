@@ -32,6 +32,8 @@
     "jsonwebtoken": "^9.0.2",
     "mysql2": "^3.9.6",
     "nodemon": "^3.1.0",
+    "npm": "^10.5.2",
+    "remove": "^0.1.5",
     "timeout": "^0.2.1",
     "vercel": "^32.3.0"
   }
