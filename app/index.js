@@ -13,7 +13,7 @@ import { methods as authorization } from "./middlewares/authorization.js";
 //->imports sessions:
 import session from "express-session";
 //import MySQLStore ;
-//import MySQLStore from 'express-session-mysql';//Deprecated aqui-<------------------<-
+import MySQLStore from 'connect-mysql2';
 /*
   
 */
