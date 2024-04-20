@@ -89,4 +89,4 @@ app.get("/register",(req,res)=>{
 
 app.post("/api/register",authentication.register)
 app.post("/api/login", authentication.login)
-app.post("/api/logOut",authentication.logOut)
+//app.post("/api/logOut",authentication.logOut)
