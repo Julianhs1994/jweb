@@ -13,7 +13,16 @@ import { methods as authorization } from "./middlewares/authorization.js";
 //->imports sessions:
 import session from "express-session";
 //import MySQLStore ;
-import MySQLStore from 'connect-mysql2';
+//import MySQLStore from "connect-mysql2";
+import {MySQLSessionStore} from 'serverless-mysql-session-store';
+const mysqlConfig = {
+  host: process.env.HOST,
+  user: process.env.USER,
+  password: process.env.PASSWORD,
+  database: process.env.DATABASE
+};
+
+
 /*
   
 */
@@ -62,6 +71,23 @@ app.use(
     })
   );
 */
+
+/*const connection = mysql.createConnection({
+  host: 'localhost',
+  user: 'your_username',
+  password: 'your_password',
+  database: 'your_database'
+});*/
+
+//const Sequelize = require('sequelize'
+const store = new MySQLSessionStore(mysqlConfig);
+
+app.use(session({
+  secret: 'your_secret',
+  resave: false,
+  saveUninitialized: true,
+  store: store
+}));
 //->Rutas:
 
 app.get("/",authorization.soloMain,(req,res)=>{
