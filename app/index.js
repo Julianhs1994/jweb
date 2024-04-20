@@ -13,7 +13,7 @@ import { methods as authorization } from "./middlewares/authorization.js";
 //->imports sessions:
 import session from "express-session";
 //import MySQLStore ;
-import MySQLStore from 'express-session-mysql';//Deprecated aqui-<------------------<-
+//import MySQLStore from 'express-session-mysql';//Deprecated aqui-<------------------<-
 /*
   
 */
@@ -41,7 +41,7 @@ const fileName = 'index.js';
 
 //->Config sessions:
 
-export const sessionStore = new MySQLStore({
+/*export const sessionStore = new MySQLStore({
 	expiration: 24 * 60 * 60 * 1000,//Expira las sesiones despues de 24 horas
 	host: process.env.HOST,//'bvm2sdmfdfugrwqzj6em-mysql.services.clever-cloud.com',
 	user: process.env.USER,//'u9nr2w0obvibn86f',
@@ -61,7 +61,7 @@ app.use(
       },
     })
   );
-
+*/
 //->Rutas:
 
 app.get("/",authorization.soloMain,(req,res)=>{

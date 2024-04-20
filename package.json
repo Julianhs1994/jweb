@@ -28,7 +28,6 @@
     "express": "^4.19.2",
     "express-ejs-layouts": "^2.5.1",
     "express-session": "^1.18.0",
-    "express-session-mysql": "^0.4.3",
     "jsonwebtoken": "^9.0.2",
     "mysql2": "^3.9.6",
     "nodemon": "^3.1.0",
