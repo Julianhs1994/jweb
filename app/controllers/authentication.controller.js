@@ -132,7 +132,7 @@ async function login(req,res){
   }
 }
 
-import { sessionStore } from "../index.js";
+/*import { sessionStore } from "../index.js";
 
 async function closeSession(session_id){
   return new Promise((resolve, reject) => {
@@ -170,10 +170,10 @@ async function logOut(req, res) {
   } catch (error) {
     console.error('Error closing session:', error);
   }
-}
+}*/
   
 export const methods = {
     register,
     login,
-    logOut
+    //logOut
 }  
