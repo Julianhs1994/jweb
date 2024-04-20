@@ -65,8 +65,8 @@ app.use(
 //->Rutas:
 
 app.get("/",authorization.soloMain,(req,res)=>{
-	const IsLoggedIn = req.session.Logeado ? true : false;
-	const Rol = req.session.Rol || "Invitado";
+	const IsLoggedIn = true //req.session.Logeado ? true : false;
+	const Rol = 'noc' //req.session.Rol || "Invitado";
 	console.log(IsLoggedIn);
 	console.log(fileName+" Rol:"+Rol);
     res.render("home",{IsLoggedIn,Rol})
