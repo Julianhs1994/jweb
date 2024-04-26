@@ -171,10 +171,19 @@ async function logOut(req, res) {
     console.error('Error closing session:', error);
   }
 }*/
-import { store } from "../index.js";
+import getStore from "../index.js";
+async function exampleFunction() {
+  let store = await getStore();
+  return store
+  // Hacer algo con la instancia de store
+}
+
+//exampleFunction();
+
 async function logOut(req, res, sinS) {
 
   try {
+    let store = await exampleFunction();
     const session_id = (sinS);
     console.log(fileName + " sessionIdToDelete:"+session_id)
     let destroyInSql;

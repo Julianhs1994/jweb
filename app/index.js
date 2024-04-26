@@ -50,9 +50,20 @@ app.use(express.static(__dirname + "/pages/css"));
 const fileName = 'index.js';
 
 //->Config sessions:
+let store;
+
+/*export store = new MySQLSessionStore(mysqlConfig);*/
+async function initializeStore() {
+  store = new MySQLSessionStore(mysqlConfig);
+}
 
 
-export const store = new MySQLSessionStore(mysqlConfig);
+export default async function getStore() {
+  if (!store) {
+    await initializeStore();
+  }
+  return store;
+}
 
 app.use(session({
   secret: 'your_secret',
