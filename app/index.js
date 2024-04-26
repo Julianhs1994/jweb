@@ -56,7 +56,7 @@ let store;
 async function initializeStore() {
   store = new MySQLSessionStore(mysqlConfig);
 }
-
+initializeStore() 
 
 export default async function getStore() {
   if (!store) {
