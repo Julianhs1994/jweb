@@ -51,7 +51,7 @@ const fileName = 'index.js';
 
 //->Config sessions:
 
-export const store = new MySQLSessionStore(mysqlConfig);
+/*export*/ const store = new MySQLSessionStore(mysqlConfig);
 
 app.use(session({
   secret: 'your_secret',
