@@ -59,7 +59,9 @@ function getDecCookie(req) {
       if (!req.session) {
         req.session = {};
       }
+      console.log("raro:"+req.sessionID);
       req.session.Rol = (decodificada.rol);
+      req.session.IdSession = req.sessionID;
       return true;  
       
     } else {

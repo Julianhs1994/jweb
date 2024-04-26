@@ -1,7 +1,43 @@
 .containerBackg{
-    background-image: url('a.jpg');
-    background-size:auto;
+    background-image: url('ferreteria.jpg');
+    background-size:cover;
     background-repeat: no-repeat;
+    height: 500px !important;
+}
+
+@media (max-width: 768px) {
+        .div-logo-media {
+            display: block; /* Muestra el elemento cuando la pantalla tiene al menos 768px de ancho */
+            width: 100%;
+            height: 100%;
+        }
+    }
+
+@media (max-width: 768px) {
+    
+    .containerBackg {
+
+        /*background-image: url('ferreteria-movil.jpg');
+        background-size:cover;
+        background-repeat: no-repeat;
+        ;*/
+        background-image: none;
+        height: 300px
+    }
+    .div-logo-media {
+        display: block !important; /* Muestra el elemento cuando la pantalla tiene al menos 768px de ancho */
+        width: 100%;
+        height: 100%;
+    }
+
+}
+
+
+
+.div-logo-media img{
+    display: block;
+    width: 100%;
+    height: 100%;
 }
 
 .jumbotron{

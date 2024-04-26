@@ -7,7 +7,13 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
     <!--font awesome-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <!--hamburguesa config-->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <!--<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.6.0/js/bootstrap.min.js" integrity="sha384-CfvinRHXKPwzc2hnCHFpA94EsrZW/Igh7hDGRmDzQKN0+kkf8qcfSi8Xa4R+b/MZ" crossorigin="anonymous"></script>-->
+    
     <link rel="stylesheet" href="layout.css">
+    
 </head>
 <body>
   <header>
@@ -33,11 +39,11 @@
             </a>
           </li>
         </ul>
-        
-        <form class="form-inline my-2 my-lg-0">
+        <form class="formRol form-inline my-2 my-lg-0">
           <ul class="navbar-nav ml-2">
-            Bienvenido(a):
+            
             <li class="ml-2 my-sm-0">
+              Bienvenido(a):
               <% if(Rol){ %>
                 <a class="ml-2 my-sm-0"><%= Rol %></a>
               <% }else{ %>
@@ -46,6 +52,21 @@
               
             </li>
           </ul>
+        </form>
+        <br>
+        <form class="form-inline my-2 my-lg-0">
+          <!--<ul class="navbar-nav ml-2">
+            
+            <li class="ml-2 my-sm-0">
+              Bienvenido(a):
+              <% if(Rol){ %>
+                <a class="ml-2 my-sm-0"><%= Rol %></a>
+              <% }else{ %>
+                <a class="ml-2 my-sm-0">Invitado</a>
+              <%}%>
+              
+            </li>
+          </ul>-->
           <input class="form-control mr-sm-2 ml-2 my-sm-0" type="search" placeholder="Buscar" aria-label="Search">
           <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>
           <%if(!IsLoggedIn){%>

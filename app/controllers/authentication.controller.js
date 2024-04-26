@@ -171,9 +171,35 @@ async function logOut(req, res) {
     console.error('Error closing session:', error);
   }
 }*/
+import { store } from "../index.js";
+async function logOut(req, res, sinS) {
+
+  try {
+    const session_id = (sinS);
+    console.log(fileName + " sessionIdToDelete:"+session_id)
+    let destroyInSql;
+      await new Promise((resolve, reject) => {
+          store.destroy(session_id, (err) => { // Utilizamos el store definido con MySQLSessionStore
+              if (err) {
+                  console.log("Ups,error eliminando session")
+                  reject(err);
+                  destroyInSql = false;
+              } else {
+                  destroyInSql = true
+                  resolve();
+              }
+          });
+      });
+      console.log("Destroy in SQL:"+destroyInSql);
+      return destroyInSql || false;
+  } catch (error) {
+      console.error('Error closing session:', error);
+      res.status(500).send('Error al cerrar la sesión');
+  }
+}
   
 export const methods = {
     register,
     login,
-    //logOut
+    logOut
 }  

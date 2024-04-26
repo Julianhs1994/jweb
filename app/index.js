@@ -12,8 +12,6 @@ import { methods as authentication } from "./controllers/authentication.controll
 import { methods as authorization } from "./middlewares/authorization.js";
 //->imports sessions:
 import session from "express-session";
-//import MySQLStore ;
-//import MySQLStore from "connect-mysql2";
 import {MySQLSessionStore} from 'serverless-mysql-session-store';
 const mysqlConfig = {
   host: process.env.HOST,
@@ -39,6 +37,9 @@ app.use(expressEjsLayouts);
 /*buscar las views en: */ 
 app.set("views",[path.join(__dirname,"pages")/*,path.join(....)*/]);
 app.set("view engine","ejs");
+//->CookieParser(captur-cookies):
+import cookieParser from "cookie-parser";
+app.use(cookieParser());
 
 //->Static configuration Folders/Files:
 app.use(express.static(__dirname + "/pages/img"));
@@ -50,51 +51,54 @@ const fileName = 'index.js';
 
 //->Config sessions:
 
-/*export const sessionStore = new MySQLStore({
-	expiration: 24 * 60 * 60 * 1000,//Expira las sesiones despues de 24 horas
-	host: process.env.HOST,//'bvm2sdmfdfugrwqzj6em-mysql.services.clever-cloud.com',
-	user: process.env.USER,//'u9nr2w0obvibn86f',
-	password: process.env.PASSWORD,//
-	database: process.env.DATABASE,//'bvm2sdmfdfugrwqzj6em',
-    tableName: 'session',
-});	
 
-app.use(
-    session({
-      secret: 'testProof',
-      resave: false,
-      saveUninitialized: false,
-      store: sessionStore,
-      cookie: {
-        maxAge: 24 * 60 * 60 * 1000, // Expira las sesiones después de 24 horas
-      },
-    })
-  );
-*/
-
-/*const connection = mysql.createConnection({
-  host: 'localhost',
-  user: 'your_username',
-  password: 'your_password',
-  database: 'your_database'
-});*/
-
-//const Sequelize = require('sequelize'
-const store = new MySQLSessionStore(mysqlConfig);
+export const store = new MySQLSessionStore(mysqlConfig);
 
 app.use(session({
   secret: 'your_secret',
   resave: false,
-  saveUninitialized: true,
-  store: store
+  saveUninitialized: false,
+  store: store,
+  /*cookie: {
+    secure: false,
+    maxAge: 24 * 60 * 60 * 1000,
+    httpOnly: true, // Esto evita que el cliente acceda a la cookie
+    sameSite: 'none' // Para evitar ataques CSRF en un entorno de producción
+  },
+  resaveUninitialized: false,
+  cookie: {
+    secure: false,
+    sameSite: 'none'
+  }*/
 }));
+
+/*app.use(session({
+  secret: 'secret-key',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: false,
+    maxAge: 24 * 60 * 60 * 1000,
+    httpOnly: true,
+    sameSite: 'none'
+  },
+  resaveUninitialized: false
+}));*/
+
+// Almacena la sesión en un lugar accesible globalmente
+//global.mySession = app.locals.session;
 //->Rutas:
 
 app.get("/",authorization.soloMain,(req,res)=>{
-	const IsLoggedIn = true //req.session.Logeado ? true : false;
-	const Rol = 'noc' //req.session.Rol || "Invitado";
+	const IsLoggedIn = /*false */req.session.Logeado ? true : false;
+	const Rol = /*'noc'*/ req.session.Rol || "Invitado";
+  const id = req.session.IdSession;
+  console.log(fileName+' idSec:'+id)
 	console.log(IsLoggedIn);
 	console.log(fileName+" Rol:"+Rol);
+  res.locals.IdSession = id;
+  //const IsLoggedIn = false;
+  //const Rol = "Invitado";
     res.render("home",{IsLoggedIn,Rol})
 })
 
@@ -115,4 +119,43 @@ app.get("/register",(req,res)=>{
 
 app.post("/api/register",authentication.register)
 app.post("/api/login", authentication.login)
-//app.post("/api/logOut",authentication.logOut)
+/*app.post("/api/logOut",*//*authentication.logOut)*//*(req,res)=>{
+  //const ID = req.session.IdSession;
+  const sessionID = req.headers.cookie.match(/jwt=(.*?);/);
+  console.log(fileName+ ' /'+sessionID)
+  //const resp = authentication.logOut(req,res)
+})*/
+
+app.post("/api/logOut",async (req, res) => {
+  const cookies = req.headers['cookie'];
+  const connectSid = cookies.split(';').find(cookie => cookie.trim().startsWith('connect.sid='));
+  if (connectSid) {
+    const cookieValue = connectSid.split('=')[1]; // Obtenemos el valor de la cookie
+    const decodedCookie = cookieValue.replace(/ /g, '_').replace(/%[a-zA-Z0-9][a-zA-Z0-9]/g, decodeURIComponent);//-> Espacios en blanco son guiones bajos.
+    const sessionId = decodedCookie.split('.')[0]; // Extraemos el identificador de sesión antes del primer punto
+    //->quitar la 's':
+    const sinS = sessionId.split('s:')[1];
+    let resp = await authentication.logOut(req,res,sinS);
+    console.log(fileName+' resp='+resp)
+    if(resp == true){
+      // Aquí también puedes limpiar otros recursos asociados a la sesión si es necesario
+      req.sessionStore.destroy(sinS, (err) => {
+        if (err) {
+          console.error('Error al destruir la sesión:', err);
+          return res.status(500).send('Error al cerrar sesión');
+        }
+        console.log('Sesión cerrada correctamente');
+        res.clearCookie('connect.sid'); // Borra la cookie de sesión en el cliente
+        res.status(201).send({status:201,message:'Sesión cerrada',redirect:"/"});
+      });
+    }else{
+      console.log("No se pudocerrar la session")
+    }
+    /*
+    console.log("sin s:"+sinS)
+    console.log(` / ${sessionId}`); // Imprimimos el identificador de sesión
+    console.log("||||||||||")*/
+    // Llamar a la función de autenticación para realizar el logout
+    //authentication.logOut(req, res);
+  }
+});
