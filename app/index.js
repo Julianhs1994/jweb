@@ -53,15 +53,19 @@ const fileName = 'index.js';
 let store;
 
 /*export store = new MySQLSessionStore(mysqlConfig);*/
-async function initializeStore() {
+async function initializeStore(nbr) {
+  if (nbr == 1){
   store = new MySQLSessionStore(mysqlConfig);
+  }else{
+    return store;
+  }
 }
-initializeStore() 
+initializeStore(1) 
 
 export default async function getStore() {
-  if (!store) {
-    await initializeStore();
-  }
+  //if (!store) {
+   let store = await initializeStore(2);
+  //}
   return store;
 }
 
