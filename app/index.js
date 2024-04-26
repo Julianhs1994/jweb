@@ -50,32 +50,39 @@ app.use(express.static(__dirname + "/pages/css"));
 const fileName = 'index.js';
 
 //->Config sessions:
-let store;
 
-/*export store = new MySQLSessionStore(mysqlConfig);*/
-async function initializeStore(nbr) {
-  if (nbr == 1){
-  store = new MySQLSessionStore(mysqlConfig);
-  }else{
-    return store;
-  }
-}
-initializeStore(1) 
-
-export default async function getStore() {
-  //if (!store) {
-   let store = await initializeStore(2);
-  //}
-  return store;
-}
+export const store = new MySQLSessionStore(mysqlConfig);
 
 app.use(session({
   secret: 'your_secret',
   resave: false,
   saveUninitialized: false,
-  store: await getStore(),
+  store: store,
+  /*cookie: {
+    secure: false,
+    maxAge: 24 * 60 * 60 * 1000,
+    httpOnly: true, // Esto evita que el cliente acceda a la cookie
+    sameSite: 'none' // Para evitar ataques CSRF en un entorno de producción
+  },
+  resaveUninitialized: false,
+  cookie: {
+    secure: false,
+    sameSite: 'none'
+  }*/
 }));
 
+/*app.use(session({
+  secret: 'secret-key',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: false,
+    maxAge: 24 * 60 * 60 * 1000,
+    httpOnly: true,
+    sameSite: 'none'
+  },
+  resaveUninitialized: false
+}));*/
 
 // Almacena la sesión en un lugar accesible globalmente
 //global.mySession = app.locals.session;
@@ -118,6 +125,32 @@ app.post("/api/login", authentication.login)
   //const resp = authentication.logOut(req,res)
 })*/
 
+async function logOut(req, res, sinS) {
+
+  try {
+    const session_id = (sinS);
+    console.log(fileName + " sessionIdToDelete:"+session_id)
+    let destroyInSql;
+      await new Promise((resolve, reject) => {
+          store.destroy(session_id, (err) => { // Utilizamos el store definido con MySQLSessionStore
+              if (err) {
+                  console.log("Ups,error eliminando session")
+                  reject(err);
+                  destroyInSql = false;
+              } else {
+                  destroyInSql = true
+                  resolve();
+              }
+          });
+      });
+      console.log("Destroy in SQL:"+destroyInSql);
+      return destroyInSql || false;
+  } catch (error) {
+      console.error('Error closing session:', error);
+      res.status(500).send('Error al cerrar la sesión');
+  }
+}
+
 app.post("/api/logOut",async (req, res) => {
   const cookies = req.headers['cookie'];
   const connectSid = cookies.split(';').find(cookie => cookie.trim().startsWith('connect.sid='));
@@ -127,7 +160,7 @@ app.post("/api/logOut",async (req, res) => {
     const sessionId = decodedCookie.split('.')[0]; // Extraemos el identificador de sesión antes del primer punto
     //->quitar la 's':
     const sinS = sessionId.split('s:')[1];
-    let resp = await authentication.logOut(req,res,sinS);
+    let resp = await /*authentication.*/logOut(req,res,sinS);
     console.log(fileName+' resp='+resp)
     if(resp == true){
       // Aquí también puedes limpiar otros recursos asociados a la sesión si es necesario
