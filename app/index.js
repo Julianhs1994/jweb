@@ -69,32 +69,9 @@ app.use(session({
   secret: 'your_secret',
   resave: false,
   saveUninitialized: false,
-  store: store,
-  /*cookie: {
-    secure: false,
-    maxAge: 24 * 60 * 60 * 1000,
-    httpOnly: true, // Esto evita que el cliente acceda a la cookie
-    sameSite: 'none' // Para evitar ataques CSRF en un entorno de producción
-  },
-  resaveUninitialized: false,
-  cookie: {
-    secure: false,
-    sameSite: 'none'
-  }*/
+  store: await getStore(),
 }));
 
-/*app.use(session({
-  secret: 'secret-key',
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-    secure: false,
-    maxAge: 24 * 60 * 60 * 1000,
-    httpOnly: true,
-    sameSite: 'none'
-  },
-  resaveUninitialized: false
-}));*/
 
 // Almacena la sesión en un lugar accesible globalmente
 //global.mySession = app.locals.session;
