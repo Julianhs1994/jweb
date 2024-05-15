@@ -36,24 +36,64 @@ log.addEventListener('click',async()=>{
 //->Funcion para el boton hamburguesa:
 
 $(document).ready(function() {
-    // Selector del botón de menú
-    const toggleButton = $('.navbar-toggler');
-    // Selector del menú de navegación
-    const navbarNav = $('.navbar-collapse');
-  
-    // Función que se ejecuta cuando se hace clic en el botón de menú
-    toggleButton.click(function() {
-      // Si el menú está oculto, muéstralo
-      if (navbarNav.hasClass('show')) {
-        navbarNav.removeClass('show').addClass('collapse navbar-collapse');
+  const toggleButton1 = $('#navbarToggler1');
+  const navbarNav1 = $('.navbar-collapse');
+
+  toggleButton1.click(function() {
+      if (navbarNav1.hasClass('show')) {
+          navbarNav1.removeClass('show').addClass('collapse navbar-collapse');
       } else {
-        // De lo contrario, oculta el menú
-        navbarNav.removeClass('collapse').addClass('show');
+          navbarNav1.removeClass('collapse').addClass('show');
       }
-      //
-      //if(navbarNav.hasClass('navbar-collapse')){
+  });
+})  
 
-      //}
+/*  $(document).ready(function() {
+    const toggleButton = $('#navbarToggler2');
+    const navbarNav = $('.sidebar-sticky');
+  
+    toggleButton.click(function() {
+        if (navbarNav.hasClass('sidebar-sticky-show')) {
+            navbarNav.removeClass('sidebar-sticky-show').addClass('sidebar-sticky-collapse');
+        } else {
+            navbarNav.removeClass('sidebar-sticky-collapse').addClass('sidebar-sticky-show');
+        }
+    });
+  });
+})*/ 
 
+$(document).ready(function() {
+    const toggleButton = $('#navbarToggler2');
+    const navbarNav = $('.sidebar-sticky');
+    const row = $('#rowDesplegable'); // Reemplaza 'yourRowId' por el ID del div "row"
+  
+    toggleButton.click(function() {
+      if (navbarNav.hasClass('sidebar-sticky-show')) {
+        navbarNav.removeClass('sidebar-sticky-show').addClass('sidebar-sticky-collapse');
+        row.hide(); // Oculta el div "row"
+      } else {
+        navbarNav.removeClass('sidebar-sticky-collapse').addClass('sidebar-sticky-show');
+        row.show(); // Muestra el div "row"
+      }
+    });
+  
+    $(window).resize(function() {
+      if ($(window).width() >= 768) {
+        navbarNav.removeClass('sidebar-sticky-collapse').addClass('sidebar-sticky-show');
+        row.show(); // Muestra el div "row"
+      } else {
+        navbarNav.removeClass('sidebar-sticky-show').addClass('sidebar-sticky-collapse');
+        row.hide(); // Oculta el div "row"
+      }
+    });
+  
+    // Evento para mostrar el div "row" al hacer click en el botón desplegable
+    row.click(function() {
+      if ($(this).is(":hidden")) { // Verifica si el div "row" está oculto
+        navbarNav.removeClass('sidebar-sticky-collapse').addClass('sidebar-sticky-show');
+        row.show(); // Muestra el div "row"
+      } else {
+        // No hace nada, ya que el div "row" ya está visible
+      }
     });
   });

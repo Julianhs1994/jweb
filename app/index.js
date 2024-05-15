@@ -10,16 +10,20 @@ import expressEjsLayouts from "express-ejs-layouts";
 //->imports methods of module functions:
 import { methods as authentication } from "./controllers/authentication.controller.js";
 import { methods as authorization } from "./middlewares/authorization.js";
+import { methods as users } from "./controllers/users.controller.js";
+import { methods as EstadoUsuario } from "./controllers/EstadoUsuario.controller.js";
+import { methods as Roles} from "./controllers/Rol.controller.js";
+import { methods as Category } from "./controllers/Category.controller.js";
 //->imports sessions:
 import session from "express-session";
 import {MySQLSessionStore} from 'serverless-mysql-session-store';
+
 const mysqlConfig = {
   host: process.env.HOST,
   user: process.env.USER,
   password: process.env.PASSWORD,
   database: process.env.DATABASE
 };
-
 
 /*
   
@@ -47,7 +51,7 @@ app.use(express.static(__dirname + "/public/"));
 app.use(express.static(__dirname + "/pages/css"));
 
 //->FileName:
-const fileName = 'index.js';
+const fileName = 'index.js|';
 
 //->Config sessions:
 
@@ -88,42 +92,76 @@ app.use(session({
 //global.mySession = app.locals.session;
 //->Rutas:
 
-app.get("/",authorization.soloMain,(req,res)=>{
-	const IsLoggedIn = /*false */req.session.Logeado ? true : false;
-	const Rol = /*'noc'*/ req.session.Rol || "Invitado";
-  const id = req.session.IdSession;
-  console.log(fileName+' idSec:'+id)
-	console.log(IsLoggedIn);
-	console.log(fileName+" Rol:"+Rol);
-  res.locals.IdSession = id;
-  //const IsLoggedIn = false;
-  //const Rol = "Invitado";
-    res.render("home",{IsLoggedIn,Rol})
-})
-
-app.get("/login",authorization.soloPublico,(req,res)=>{
+app.get("/",authorization.soloMain,async (req,res)=>{
 	const IsLoggedIn = req.session.Logeado ? true : false;
 	const Rol = req.session.Rol || "Invitado";
-    res.render('login',{IsLoggedIn,Rol})
+  //const id = req.session.IdSession; 
+  const AdminLayout = false; 
+  const Categorias = await Category.getAllCategory(req,res);
+  res.render("home",{IsLoggedIn,Rol,AdminLayout,Categorias})
 })
 
-app.get("/register",(req,res)=>{
+app.get("/login",authorization.soloPublico,async (req,res)=>{
+	const IsLoggedIn = req.session.Logeado ? true : false;
+	const Rol = req.session.Rol || "Invitado";
+  const AdminLayout = false;
+  const Categorias = await Category.getAllCategory(req,res);
+    res.render('login',{IsLoggedIn,Rol,AdminLayout,Categorias})
+})
+
+app.get("/register",async(req,res)=>{
   const IsLoggedIn = req.session.Logeado ? true : false;
 	const Rol = req.session.Rol || "Invitado";
-    res.render("register",{IsLoggedIn,Rol})
+  const AdminLayout = false;
+  const Categorias = await Category.getAllCategory(req,res);
+    res.render("register",{IsLoggedIn,Rol,AdminLayout,Categorias})
 })
+
+app.get("/admin",async(req,res)=>{
+  const IsLoggedIn = req.session.Logeado ? true : false;
+	const Rol = req.session.Rol || "Invitado";
+  const AdminLayout = true; 
+  const Categorias = await Category.getAllCategory(req,res);
+  res.render("admin",{IsLoggedIn,Rol,AdminLayout,Categorias})
+})
+
+app.get("/admin-users",async (req,res)=>{
+  const IsLoggedIn = req.session.Logeado ? true : false;
+  const Rol = req.session.Rol || "Invitado";
+  const AdminLayout = true;
+  const arrayEstado = await EstadoUsuario.getAllEstadoUsuario();
+  const arrayRol = await Roles.getAllRol();
+  const Categorias = await Category.getAllCategory(req,res);
+  res.render("users",{IsLoggedIn,Rol,AdminLayout,arrayEstado,arrayRol,Categorias})
+})
+
+app.get("/admin-products",async (req,res) =>{
+  const IsLoggedIn = req.session.Logeado ? true : false;
+  const Rol = req.session.Rol || "Invitado";
+  const AdminLayout = true;
+  const arrayEstado = await EstadoUsuario.getAllEstadoUsuario();
+  const arrayRol = await Roles.getAllRol();
+  const Categorias = await Category.getAllCategory(req,res);
+  res.render("products",{IsLoggedIn,Rol,AdminLayout,arrayEstado,arrayRol,Categorias})
+})
+
+//->Rutas get con Funcion + retorno:
+//~agrega / antes de api...
+
+app.get("/api/getAllEstadoUsuario", EstadoUsuario.getAllEstadoUsuario)
+app.get("/api/getAllUsers", users.getAllUsers)
+app.get("/api/getAllCategoryData", Category.getAllCategoryData)
 
 //->Rutas con post:
 //~agrega / antes de api...
 
+app.post("/api/getNameEstado", EstadoUsuario.getNameEstado)
 app.post("/api/register",authentication.register)
 app.post("/api/login", authentication.login)
-/*app.post("/api/logOut",*//*authentication.logOut)*//*(req,res)=>{
-  //const ID = req.session.IdSession;
-  const sessionID = req.headers.cookie.match(/jwt=(.*?);/);
-  console.log(fileName+ ' /'+sessionID)
-  //const resp = authentication.logOut(req,res)
-})*/
+app.post("/api/getDataModalEditUser", users.getDataModalEditUser)
+app.post("/api/EditUser", users.editUser)
+app.post("/api/DeleteUser", users.deleteUser)
+app.post("/api/addCategory", Category.addCategory)
 
 async function logOut(req, res, sinS) {
 
@@ -177,7 +215,6 @@ app.post("/api/logOut",async (req, res) => {
       console.log("No se pudocerrar la session")
     }
     /*
-    console.log("sin s:"+sinS)
     console.log(` / ${sessionId}`); // Imprimimos el identificador de sesión
     console.log("||||||||||")*/
     // Llamar a la función de autenticación para realizar el logout
