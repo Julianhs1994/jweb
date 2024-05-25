@@ -8,15 +8,14 @@ if(btn){
 }
 
 $('#ModalAddCategory').on('click', '.cerrar-modal', function(e) {
-    e.preventDefault();
-    $('#ModalAddCategory').modal('hide');
-  });
+  e.preventDefault();
+  $('#ModalAddCategory').modal('hide');
+});
 
   $('#ModalAddCategory').on('click', '.close', function(e) {
     e.preventDefault();
     $('#ModalAddCategory').modal('hide');
   });
-
 
 const btn2 = document.getElementById("AgregarCategoria")
 if(btn2){
@@ -49,3 +48,55 @@ if(btn2){
           }
     })
 }  
+
+const btn3 = document.getElementById("addProduct");
+if(btn3){
+  btn3.addEventListener("click",async()=>{
+    $('#ModalAddProduct').modal('show');
+  })
+}
+
+$('#ModalAddProduct').on('click', '.cerrar-modal', function(e) {
+  e.preventDefault();
+  $('#ModalAddProduct').modal('hide');
+});
+
+  $('#ModalAddProduct').on('click', '.close', function(e) {
+    e.preventDefault();
+    $('#ModalAddProduct').modal('hide');
+  });
+
+  document.getElementById('formulario').addEventListener('submit',async (e) => {
+
+    const formData = new FormData(document.getElementById('formulario'));
+    e.preventDefault();
+    $.ajax({
+        type: 'POST',
+        url: '/addProduct',
+        data: formData,
+        processData: false,
+        contentType: false
+    })
+    .done((data) => {
+        Swal.fire(data.message);
+        $('#ModalAddProduct').modal('hide');
+    });
+});
+
+//->Response formularioEdit:
+document.getElementById('formulario').addEventListener('submit',async (e) => {
+
+  const formData = new FormData(document.getElementById('formularioEdit'));
+  e.preventDefault();
+  $.ajax({
+      type: 'POST',
+      url: '/editProduct',
+      data: formData,
+      processData: false,
+      contentType: false
+  })
+  .done((data) => {
+      Swal.fire(data.message);
+      $('#ModalEditProduct').modal('hide');
+  });
+});

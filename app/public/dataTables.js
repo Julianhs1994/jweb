@@ -5,7 +5,7 @@ $(document).ready(function() {
     $('#tabla-datos').DataTable({
       serverSide: true, // Habilita el modo de procesamiento en el lado del servidor
       "language": {
-        "url": "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
+        "url": "Spanish.json"
       },
       columnDefs: [
         {
@@ -53,7 +53,7 @@ $(document).ready(function() {
     $('#tabla-categoria').DataTable({
       serverSide: true, // Habilita el modo de procesamiento en el lado del servidor
       "language": {
-        "url": "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
+        "url": "Spanish.json"
       },
       columnDefs: [
         {
@@ -91,7 +91,106 @@ $(document).ready(function() {
         }  
       ]
     });
+    $('#tabla-producto').DataTable({
+      serverSide: true, // Habilita el modo de procesamiento en el lado del servidor
+      "language": {
+        "url": "Spanish.json"
+      },
+      columnDefs: [
+        {
+          targets:1,
+          className: 'descTable'
+        },
+        {
+            targets: 4, // Índice de la columna (empezando por 0)
+            className: 'centerTD' , // Ancho deseado para la columna
+            id: 'centerTD'
+
+        },
+        {
+          targets: 6,
+          className: 'classEditar',
+        },
+        {
+          targets: 7,
+          className: 'classEliminar'
+        }
+    ],
+    //scrollX: true,
+      "lengthMenu": [2, 3, 4, 5], // Cambiar opciones de paginación
+      /*"lengthMenuCallback": function(settings) {
+
+        const select = $(settings.nTable).find('select[name="tabla-producto_length"]');
+        $(select).on('change', function() {
+          console.log('Cambiaste la selección');
+          // Código a ejecutar cuando se cambia la selección
+        });
+      }*/
+    
+      ajax: {
+        url: '/api/getAllProduct', // Ruta hacia tu función getAllUsers
+        type: 'GET', // Método de solicitud
+        data: function (data) {
+          // Envía los parámetros necesarios para la paginación
+          data.page = data.start / data.length + 1;
+          //console.log(data.length)
+          //->tamaño de paginacion:
+          const div = document.getElementById('table-responsiveProd')
+          const tabla = document.getElementById('tabla-producto')
+          //->Eliminar/Limpiar clases antes de poner la que se debe: 
+          div.classList.remove("prod2")
+          tabla.classList.remove('prod2Table')
+          div.classList.remove("prod3")
+          tabla.classList.remove('prod3Table')
+          div.classList.remove("prod4")
+          tabla.classList.remove('prod4Table')
+          if(data.length == 3){
+            div.classList.add("prod2")
+            tabla.classList.add('prod2Table')
+          }
+          if(data.length == 4){
+            div.classList.add("prod3")
+            tabla.classList.add('prod3Table')
+          }
+          if(data.length == 5){
+            div.classList.add("prod4")
+            tabla.classList.add('prod4Table')
+          }
+        }
+      },
+      columns: [
+       //
+        { data: 'Nombre' },
+        { data: 'Descripcion' },
+        { data: 'Precio' },
+        { data: 'Cantidad' },
+        /*{ data: 'Imagen' },*/
+        {
+          data: 'Imagen',
+          render: function(data){
+            return '<img class="none" id="imgProd" src=" '+data+' ">'
+          }
+        },
+        //{ data: 'IdCategoria' },
+        { data: 'NombreCat' },
+        {
+          data: 'IdProducto',
+          
+          render: function (data, type, row) {
+            return '<button type="submit" class="editarProducto" id="editarProducto" value="' + data + '" data-idproducto="' + data + '">Editar</button>'
+          }
+        }, 
+        {
+          data: 'IdProducto',
+          render: function (data, type, row) {
+            return '<button type="submit" class="eliminarProducto" id="eliminarProducto" value="' + data + '">Eliminar</button>';
+          }
+        }  
+      ]
+      //
+    });
   });
+
 
   //->Modal users:
 
@@ -166,49 +265,6 @@ $(document).ready(function() {
     $('#myModal').modal('hide');
   });
 
-  /*const DeleteUser = document.getElementById('EliminarUsuario')
-  if (DeleteUser){
-  DeleteUser.addEventListener('click',async function() {
-    const IdUsuario = document.getElementById("IdUsuario").value;
-    Swal.fire({
-      title: '¿Estás seguro?',
-      text: "No podrás revertir esto!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Sí, eliminar'
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        const response = await fetch("api/DeleteUser",{
-          method:"POST",
-          headers:{
-            "Content-type":"application/json"
-          },
-          body:JSON.stringify({
-            IdUsuario:IdUsuario
-          })
-        })
-        const res = await response.json();
-        let icono = '';
-        if(res.status==200){
-          icono = 'success'
-        }else if(res.status==400){
-          icono= 'warning'
-        }else{
-          icono = 'question'
-        }
-        Swal.fire({
-          title: '¡Hola!',
-          text: res.message,
-          icon: icono
-        })
-        
-      }
-    })   
-  });
-}*/
-
 //->Eliminar USUARIO "onClick":
 $('#tabla-datos').on('click', '.eliminar', async function() {
   const btnEliminar = document.querySelectorAll('.eliminar'); 
@@ -258,6 +314,75 @@ $('#tabla-datos').on('click', '.eliminar', async function() {
   })
 })  
 
+$('#tabla-producto').on('click', '.editarProducto', async function(e) {
+  e.preventDefault();
+  //
+    //if ($('#ModalEditProduct').is(':visible')) {
+  const valor = $(this).data('idproducto')
+      /*console.log(valor);
+      alert(valor)*/
+  const response = await fetch("api/getAllProdPost",{
+    method: "POST",
+    headers:{
+      "Content-type":"application/json"
+    },
+    body:JSON.stringify({
+      IdProducto:valor
+    })
+  });
+  const res = await response.json();
+  if(res.status == 200){
+    let Array = res.array;
+    $('#ModalEditProduct').modal('show');
+    if ($('#ModalEditProduct').is(':visible')) {
+    //->Array:
+    const a = Array[0];
+    //->Sacar variables del array:
+    let Nombre = a.Nombre;
+    let Descripcion = a.Descripcion;
+    let Precio = a.Precio;
+    let Cantidad = a.Cantidad;
+    let Imagen = a.Imagen;
+    let IdCategoria = a.IdCategoria
 
-//->DataTables Productos:
+    const n = getElementById('NombreEdit')
+    n.value = ""+Nombre+"";
+    const d = getElementById('DescripcionEdit')
+    d.value = ""+Descripcion+"";
+    const p = getElementById('PrecioEdit')
+    p.value = ""+Precio+"";
+    const c = getElementById('CantidadEdit')
+    c.value = ""+Cantidad+"";
+    const i = getElementById('Imagen_old')
+    i.value = ""+Imagen+"";
 
+    const selectElement2 = document.getElementById("IdCategoriaEdit");
+    const optionToSelect = selectElement2.querySelector('[value="'+IdCategoria+'"]');
+    if (optionToSelect) {
+      optionToSelect.selected = true;
+    }
+    
+    //
+  }  
+  }else{
+    const message=res.message;
+    alert(message)
+  }
+})
+
+$('#ModalEditProduct').on('click', '.cerrar-modal', function(e) {
+  e.preventDefault();
+  $('#ModalEditProduct').modal('hide');
+});
+
+$('#ModalEditProduct').on('click', '.close', function(e) {
+  e.preventDefault();
+  $('#ModalEditProduct').modal('hide');
+});
+
+/*const EditarInModal = getElementById('EditarProducto');
+if(EditarInModal){
+  EditarInModal.addEventListener('click',async () =>{
+    alert("yes")
+  })
+}*/

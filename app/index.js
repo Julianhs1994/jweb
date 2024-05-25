@@ -14,6 +14,8 @@ import { methods as users } from "./controllers/users.controller.js";
 import { methods as EstadoUsuario } from "./controllers/EstadoUsuario.controller.js";
 import { methods as Roles} from "./controllers/Rol.controller.js";
 import { methods as Category } from "./controllers/Category.controller.js";
+import { methods as Product } from "./controllers/Product.controller.js";
+
 //->imports sessions:
 import session from "express-session";
 import {MySQLSessionStore} from 'serverless-mysql-session-store';
@@ -25,9 +27,19 @@ const mysqlConfig = {
   database: process.env.DATABASE
 };
 
-/*
-  
-*/
+//->imports multer:
+import multer from "multer";
+
+const storage = multer.diskStorage({
+  destination: function(req, file, cb) {
+    cb(null, 'app/uploads/');
+  },
+  filename: function(req, file, cb) {
+    cb(null, Date.now() + path.extname(file.originalname));
+  }
+});
+const upload = multer({ storage: storage });
+
 //->Server:
 const app = express();
 const portNumber = 3000;
@@ -49,6 +61,7 @@ app.use(cookieParser());
 app.use(express.static(__dirname + "/pages/img"));
 app.use(express.static(__dirname + "/public/"));
 app.use(express.static(__dirname + "/pages/css"));
+app.use(express.static(__dirname + "/uploads"));
 
 //->FileName:
 const fileName = 'index.js|';
@@ -151,6 +164,7 @@ app.get("/admin-products",async (req,res) =>{
 app.get("/api/getAllEstadoUsuario", EstadoUsuario.getAllEstadoUsuario)
 app.get("/api/getAllUsers", users.getAllUsers)
 app.get("/api/getAllCategoryData", Category.getAllCategoryData)
+app.get("/api/getAllProduct", Product.getAllProduct)
 
 //->Rutas con post:
 //~agrega / antes de api...
@@ -162,6 +176,7 @@ app.post("/api/getDataModalEditUser", users.getDataModalEditUser)
 app.post("/api/EditUser", users.editUser)
 app.post("/api/DeleteUser", users.deleteUser)
 app.post("/api/addCategory", Category.addCategory)
+app.post("/api/getAllProdPost", Product.getAllProductPost)
 
 async function logOut(req, res, sinS) {
 
@@ -221,3 +236,32 @@ app.post("/api/logOut",async (req, res) => {
     //authentication.logOut(req, res);
   }
 });
+
+app.post('/addProduct', upload.single('Imagen'),async function (req, res, next) {
+  // req.file es el archivo del `Imagen`
+  // req.body contendrá los campos de texto, si los hubiera.
+  const {Nombre,Descripcion,Precio,Cantidad,IdCategoria} = req.body;
+  if(Nombre == '' || Descripcion == '' || Precio == '' || Cantidad == '' || IdCategoria == '' ){res.send({message:"Ningún campo debe estar vacio"}) ;return}
+  let Imagen;
+  if(req.file && req.file.filename){
+    Imagen = req.file.filename
+    const insert = await Product.addProduct(Nombre,Descripcion,Precio,Cantidad,IdCategoria,Imagen)
+    //console.log(fileName+insert)
+    if(insert == true){
+      res.send({message:"Inserción realizada"})
+    }else{
+      res.send({message:"Inserción no realizada"})
+    }
+    //COMMENT:AQUI CONTROLADOR
+  }else{
+    return res.send({message:"No se ha podido ejecutar la acción"})
+  }
+})
+
+app.post("editProduct", upload.single('Imagen'),async(req,res)=>{
+  const {NombreEdit,DescripcionEdit,PrecioEdit,CantidadEdit,Imagen_old,IdCategoriaEdit} = req.body;
+  if(NombreEdit == '' || DescripcionEdit == '' || PrecioEdit == '' || CantidadEdit == '' || Imagen_old == '' || IdCategoriaEdit){res.send({message:"Ningún campo debe estar vacio"}) ;return}
+  //->Continuar con el ocntrolador aqui
+  
+
+})

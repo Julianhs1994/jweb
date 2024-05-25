@@ -63,6 +63,59 @@
     box-shadow: #222 1px 0 10px;
   }
 
+  .table-responsiveProd{
+    width: 90% !important;
+    justify-content: center !important;
+    border: 1px solid rgb(15, 14, 14);
+    margin-left: 5%;
+    background-color: #aa9c9c;
+    box-shadow: #222 1px 0 10px;
+    overflow-x: auto;
+    max-width: 100%;
+  }
+
+
+  @media (max-width: 768px) {
+    .table-responsiveProd {
+      margin: 0 !important;
+      width: 100% !important;
+      max-width: none !important;
+      table-layout: auto;
+      padding: 0% !important;
+      
+    }
+    .table-responsiveProd table {
+      margin-left: 50px !important;
+      width: 100% !important;
+      table-layout: auto !important;
+    }
+    .table-responsiveProd td {
+      width: 50% !important;
+    }
+    .table-responsiveProd table img{
+      position: absolute;
+      width: 10.5% ;
+      height: 40% !important;
+  
+    }
+  
+  }
+
+  @media (min-width: 768px) {
+    .table-responsiveProd table {
+      width: 100% !important;
+    }
+    .table-responsiveProd table img{
+      position: absolute;
+      width: 12% ;
+      height: 40% !important;
+  
+    }
+  
+
+  }
+
+  
 
   .dataTables_wrapper{
     justify-content: center !important;
@@ -77,14 +130,191 @@
     align-items: center !important;
   }
 
-  .dataTables_wrapper .row{
+  .table-responsiveProd div{
+    display: flex !important;
+    flex-direction: column !important;
+    padding: 0% !important;
     justify-content: center !important;
     align-items: center !important;
   }
 
-  table{
-    width: 60% !important;
+  .dataTables_wrapper .row{
+    width: 100% !important;
+    justify-content: center !important;
     align-items: center !important;
-
   }
 
+  /*table{
+    width: 80% !important;
+    align-items: center !important;
+
+  }*/
+  
+  .ContainerP{
+    margin-left: 12%;
+    margin-right: 12%;
+  }
+
+  .ContainerP p{
+    text-align: center;
+  }
+
+  .table-responsiveProd table {
+    width: 80% !important;
+  }
+
+  /*#tabla-producto tr th{
+    width: 300px !important;
+  } */
+
+
+
+  /*
+
+  tbody tr td {
+    padding: 0 !important;
+    width: 8% !important; /* o el ancho que desees */
+    /*height: 10px !important;
+  }*/
+
+  thead tr th{
+    padding: 0 !important;
+    text-align: center !important;
+  }
+
+  .dataTables_wrapper {
+    display: flex !important;
+    justify-content: center !important;
+  }
+  
+  .classEditar button {
+    margin-top: calc((100% - 20px) / 2) !important;
+  }
+
+  .classEliminar button {
+    margin-top: calc((100% - 37px) / 2) !important;
+  }
+
+  thead tr td{
+    padding: 0 !important;
+    text-align: center !important;
+    display: flex;
+    justify-content: center !important;
+    align-items: center !important;
+    /*min-height: 500px !important*/
+    max-height: 100px !important;
+  }
+
+  tr .centerTD{
+    padding: 0% !important;
+    align-items: center;
+    background-color:#aa9c9c;
+  }
+
+  tr td.descTable{
+    padding: 0 !important;
+    text-align: center;
+    height: 100px
+  }
+
+
+  tr .classEditar{
+    align-items: center;
+    padding: 0% !important;
+  }
+
+  tr .classEliminar{
+    align-items: center !important;
+    padding: 0% !important;
+  }
+
+  tr td button{
+    width: 100% !important;
+  }
+
+  #img.sorting{
+    color: #DD2476;
+    width: 400px !important;
+  }
+  
+  thead tr #nombre{
+    background-color: #DD2476 !important;
+    width: 70px !important;
+  }
+
+  thead tr #descripcion{
+    width: 80px !important;
+  }
+
+  thead tr #precio{
+    width: 60px !important;
+    text-align: center;
+  }
+
+  thead tr #cantidad{
+    width: 5px !important;
+  }
+
+  thead tr #imagen{
+    width: 88px !important;
+  }
+
+  thead tr #idcategoria{
+    width: 10px !important;
+    text-align: center;
+  }
+
+  thead #editar{
+    color:aqua;
+    width: 20px !important;
+    padding: 0 !important;
+  }
+
+  thead tr #eliminar{
+    width: 10px !important;
+    color:aqua;
+    padding: 0 !important;
+  }
+
+  /* div contenedor tabla productos */
+
+  .prod2{
+    height: 600px;
+  }
+
+  .prod2Table{
+    height: 400px;
+  }
+
+  .prod2Table td img{
+    height: 28% !important;
+  }
+
+
+  /****/
+
+  .prod3{
+    height: 600px;
+  }
+
+  .prod3Table{
+    height: 400px;
+  }
+
+  .prod3Table td img{
+    height: 20% !important;
+  }
+
+  /****/
+
+  .prod4{
+    height: 600px;
+  }
+
+  .prod4Table{
+    height: 400px;
+  }
+
+  .prod4Table td img{
+    height: 15% !important;
+  }

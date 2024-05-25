@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="products.css">
+    <!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" crossorigin="anonymous">-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">
 </head>
 <body>
     <main class="flex col-md-10 ml-sm-auto mt-0 mb-0">
@@ -19,7 +21,7 @@
                             <h5 class="card-title">Productos</h5>
                             <h6 class="card-subtitle mb-2 text-muted">Agregar productos</h6>
                             <p class="card-text">Si quiere agregar productos nuevos,para que se muestren en su categoria respectiva ,Por favor click en el siguiente Boton:</p>
-                            <a id="" href="#" class="btnProd btn mr-2"><i class="fas fa-link"></i> Agregar Producto</a>
+                            <a id="addProduct" href="#" class="btnProd btn mr-2"><i class="fas fa-link"></i> Agregar Producto</a>
                             <!--<a href="#" class="btnProd "><i class="fab fa-github"></i> Github</a>-->
                         </div>
                     </div>
@@ -38,6 +40,11 @@
                 </div> 
             </div>
         </div>
+        <br>
+        <div class="ContainerP">
+        <p>*En este apartado puede visualizar y eliminar las secciones y/o categorias que contienen sus productos,Se debe tener cuidado ya que si elimina una categoria ,tambien eliminará los productos que contiene la misma.</p>
+        </div>
+        <br>
         <div class="table-responsive">
             <table class="datatable table table-striped table-bordered" id="tabla-categoria">
                 <thead class="thead-dark">
@@ -52,31 +59,165 @@
             <br>
         </div>
         <br>
+        <br>
+        <br>
+        <div class="ContainerP">
+        <p>*En este apartado puede visualizar,buscar,actualizar y eliminar sus productos de forma dinamina, pero debe tener cuidado al eliminar un producto ya que si lo elimina,este se eliminará de forma permanente de el sistema. </p>
+        </div>
+        <br>
+        <div class="table-responsiveProd" id="table-responsiveProd">
+            <table class="datatable table table-striped table-bordered" id="tabla-producto">
+                <thead class="thead-dark">
+                    <tr>
+                        <th id="nombre">Nombre</th>
+                        <th id="descripcion">Descripcion</th>
+                        <th id="precio">Precio</th>
+                        <th id="cantidad">Cantidad</th>
+                        <th id="imagen">Imagen</th>
+                        <th id="idcategoria">Categoria</th>
+                        <th id="editar">Editar</th>
+                        <th id="eliminar">Eliminar</th>
+                    </tr>
+                </thead>
+                <tbody><!--vacio(datos ingresados por dataTable)--></tbody>
+            </table>
+            <br>
+        </div>
+        <br>
+
         <div class="modal" id="ModalAddCategory" tabindex="-1">
             <div class="modal-dialog">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title">Agregar Categoria|Los Bucaros</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <div class="modal-body">
-                    <p>Agregue la categoria aqui:</p>
-                    <form action="">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Agregar Categoria|Los Bucaros</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Agregue la categoria aqui:</p>
+                        <form action="">
                         <div class="form-group">
                             <label for="Nombre">Nombre:</label>
                             <input type="text" class="form-control" id="Nombre" name="Nombre">
                         </div>
-                    </form>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary cerrar-modal" data-dismiss="modal">Close</button>
+                        <button type="button" id="AgregarCategoria" class="btn btn-primary">Crear</button>
+                    </div>
                 </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary cerrar-modal" data-dismiss="modal">Close</button>
-                  <button type="button" id="AgregarCategoria" class="btn btn-primary">Crear</button>
-                </div>
-              </div>
             </div>
-          </div>        
+        </div>        
+        <div class="modal" id="ModalAddProduct" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Agregar Producto|Los Bucaros</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Agregue el producto aqui:</p>
+                        <form id="formulario" action="/addProduct" method="post" enctype="multipart/form-data">
+                            <div class="form-group">
+                                <label for="Nombre">Nombre del producto:</label>
+                                <input type="text" class="form-control" id="Nombre" name="Nombre">
+                            </div>
+                            <div class="form-group">
+                                <label for="Descripcion">Descripcion:</label>
+                                <input type="text" class="form-control" id="Descripcion" name="Descripcion">
+                            </div>
+                            <div class="form-group">
+                                <label for="Precio">Precio:</label>
+                                <input type="text" class="form-control" id="Precio" name="Precio">
+                            </div>
+                            <div class="form-group">
+                                <label for="Cantidad">Cantidad:</label>
+                                <input type="text" class="form-control" id="Cantidad" name="Cantidad">
+                            </div>
+                            <div class="form-group">
+                                <label for="Imagen">Imagen:</label>
+                                <input type="file" name="Imagen" id="Imagen" />
+                            </div>
+                            <div class="form-group">
+                                <label>*¿En que categoria se añadirá el producto?:</label>
+                                <br>
+                                <% if(Categorias && Categorias.length > 0){ %>
+                                    <select name="IdCategoria">
+                                        <% Categorias.forEach(objeto =>{ %>
+                                            <option value="<%= objeto.IdCategoria %>"><%= objeto.Nombre %> </option>
+                                        <%})%>
+                                    </select>
+                                <%}%>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary cerrar-modal" data-dismiss="modal">Close</button>
+                                <button type="submit" id="AgregarCategoria" class="btn btn-primary">Crear</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal" id="ModalEditProduct" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Editar Producto|Los Bucaros</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Edite su producto aqui:</p>
+                        <form id="formularioEdit" action="/editProduct" method="post" enctype="multipart/form-data">
+                            <div class="form-group">
+                                <label for="NombreEdit">Nombre:</label>
+                                <input type="text" class="form-control" id="NombreEdit" name="NombreEdit">
+                            </div>
+                            <div class="form-group">
+                                <label for="DescripcionEdit">Descripcion:</label>
+                                <input type="text" class="form-control" id="DescripcionEdit" name="DescripcionEdit">
+                            </div>
+                            <div class="form-group">
+                                <label for="PrecioEdit">Precio:</label>
+                                <input type="text" class="form-control" id="PrecioEdit" name="PrecioEdit">
+                            </div>
+                            <div class="form-group">
+                                <label for="CantidadEdit">Cantidad:</label>
+                                <input type="text" class="form-control" id="CantidadEdit" name="CantidadEdit">
+                            </div>
+                            <div class="form-group">
+                                <label for="Imagen_old">Imagen actual:</label>
+                                <input type="text" class="form-control" id="Imagen_old" name="Imagen_old" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="Imagen">Imagen nueva:</label>
+                                <input type="file" name="Imagen" id="Imagen" />
+                            </div>
+                            <div class="form-group">
+                                <label>*¿En que categoria se añadirá el producto?:</label>
+                                <br>
+                                <% if(Categorias && Categorias.length > 0){ %>
+                                    <select id="IdCategoriaEdit" name="IdCategoriaEdit">
+                                        <% Categorias.forEach(objeto =>{ %>
+                                            <option value="<%= objeto.IdCategoria %>"><%= objeto.Nombre %> </option>
+                                        <%})%>
+                                    </select>
+                                <%}%>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary cerrar-modal" data-dismiss="modal">Close</button>
+                                <button type="button" id="EditarProducto" class="btn btn-primary">Editar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>                
     </main>
 </body>
 <!--DataTables Jquery-->
