@@ -21,7 +21,7 @@ async function getAllProduct(req,res){
     try{
         const currentPage = req.query.page || 1;
         const pageSize = req.query.length || 5;
-        console.log(pageSize)
+        //console.log(pageSize)
         //->paginar resultados de sql:Esto significa que, por ejemplo, si la página actual es 2 y el tamaño de la página es 5, el offset será 10 (2 - 1 = 1, 1 * 5 = 5, 10 - 1 = 9). Esto indica a la consulta SQL para seleccionar las 10 filas que siguen a la fila con el índice 9.
         const offset = (currentPage - 1) * pageSize;
 
@@ -76,8 +76,25 @@ async function getAllProductPost(req,res){
     }
 }
 
+async function editProduct(NombreEdit,DescripcionEdit,PrecioEdit,CantidadEdit,img,IdCategoriaEdit,IdProductoEdit){
+    const {connection,pool} = await getConnection();
+    try{
+        //let Precio = PrecioEdit;
+        const sql = `UPDATE Producto SET Nombre=?,Descripcion=?,Precio=?,Cantidad=?,Imagen=?,IdCategoria=? WHERE IdProducto =? `
+        let query = await (connection.query(sql,[NombreEdit,DescripcionEdit,PrecioEdit,CantidadEdit,img,IdCategoriaEdit,IdProductoEdit]))
+        return true
+    }catch(err){
+        console.error(err);
+        return false
+    }
+    finally{
+        await pool.end()
+    }
+}
+
 export const methods = {
     addProduct,
     getAllProduct,
-    getAllProductPost
+    getAllProductPost,
+    editProduct
 }

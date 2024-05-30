@@ -40,6 +40,11 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 
+//->fs:
+//import { promises as fs } from "fs";
+import * as fs from "fs";
+import {stat} from "fs/promises"
+
 //->Server:
 const app = express();
 const portNumber = 3000;
@@ -75,31 +80,7 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   store: store,
-  /*cookie: {
-    secure: false,
-    maxAge: 24 * 60 * 60 * 1000,
-    httpOnly: true, // Esto evita que el cliente acceda a la cookie
-    sameSite: 'none' // Para evitar ataques CSRF en un entorno de producción
-  },
-  resaveUninitialized: false,
-  cookie: {
-    secure: false,
-    sameSite: 'none'
-  }*/
 }));
-
-/*app.use(session({
-  secret: 'secret-key',
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-    secure: false,
-    maxAge: 24 * 60 * 60 * 1000,
-    httpOnly: true,
-    sameSite: 'none'
-  },
-  resaveUninitialized: false
-}));*/
 
 // Almacena la sesión en un lugar accesible globalmente
 //global.mySession = app.locals.session;
@@ -258,10 +239,56 @@ app.post('/addProduct', upload.single('Imagen'),async function (req, res, next) 
   }
 })
 
-app.post("editProduct", upload.single('Imagen'),async(req,res)=>{
-  const {NombreEdit,DescripcionEdit,PrecioEdit,CantidadEdit,Imagen_old,IdCategoriaEdit} = req.body;
-  if(NombreEdit == '' || DescripcionEdit == '' || PrecioEdit == '' || CantidadEdit == '' || Imagen_old == '' || IdCategoriaEdit){res.send({message:"Ningún campo debe estar vacio"}) ;return}
-  //->Continuar con el ocntrolador aqui
-  
+
+app.post("/editProduct", upload.single('Imagen_new'),async function (req,res){
+  const {NombreEdit,DescripcionEdit,PrecioEdit,CantidadEdit,Imagen_old,IdCategoriaEdit,IdProductoEdit} = req.body;
+  if(NombreEdit == '' || DescripcionEdit == '' || PrecioEdit == '' || CantidadEdit == '' || Imagen_old == '' || IdCategoriaEdit == '' || IdProductoEdit == ''){res.send({message:"Ningún campo debe estar vacio"}) ;return};
+
+  let img;
+  if (req.file && req.file.filename){
+    img = req.file.filename;
+    //->Eliminar imagen antigua:
+    //await fs.unlink(`app/uploads/${Imagen_old}`)
+
+    //let filePath = `app/uploads/${Imagen_old}`
+    const filePath = path.join('app', 'uploads', Imagen_old);
+    try {
+      await fs.promises.stat(filePath);
+      console.log(`El archivo ${Imagen_old} existe`);
+      console.log("Eliminando...")
+      fs.unlink(filePath, (err) => {
+        if (err) {
+          console.log(`Error al eliminar el archivo ${Imagen_old}: ${err.message}`);
+        } else {
+          console.log(`Archivo ${Imagen_old} eliminado con éxito`);
+        }
+      });
+    } catch (error) {
+      if (error.code === 'ENOENT') {
+        console.log(`El archivo ${Imagen_old} no existe`);
+      } else {
+        console.log(`Error al acceder al archivo ${Imagen_old}: ${error.message}`);
+      }
+    }
+    
+
+    
+    
+  }else{
+    img = Imagen_old;
+  }
+  const boolean = await Product.editProduct(NombreEdit,DescripcionEdit,PrecioEdit,CantidadEdit,img,IdCategoriaEdit,IdProductoEdit);
+  if(boolean == true){
+    res.send({message:"Producto editado"})
+  }else{
+    fs.unlink(req.file.filename, (err) => {
+      if (err) {
+        console.log(`Error al eliminar el archivo ${req.file.filename}: ${err.message}`);
+      } else {
+        console.log(`Archivo ${req.file.filename} eliminado con éxito`);
+      }
+    });
+    res.send({message:"No se pudo editar el producto"})
+  }
 
 })

@@ -84,14 +84,14 @@ $('#ModalAddProduct').on('click', '.cerrar-modal', function(e) {
 });
 
 //->Response formularioEdit:
-document.getElementById('formulario').addEventListener('submit',async (e) => {
+document.getElementById('formularioEdit').addEventListener('submit',async (e) => {
 
-  const formData = new FormData(document.getElementById('formularioEdit'));
+  const formDatas = new FormData(document.getElementById('formularioEdit'));
   e.preventDefault();
   $.ajax({
       type: 'POST',
       url: '/editProduct',
-      data: formData,
+      data: formDatas,
       processData: false,
       contentType: false
   })

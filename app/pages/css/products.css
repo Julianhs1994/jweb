@@ -55,12 +55,17 @@
   }
 
   .table-responsive{
-    width: 40% !important;
+    width: 60% !important;
     justify-content: center !important;
     border: 1px solid rgb(15, 14, 14);
-    margin-left: 28%;
+    margin-left: 20%;
     background-color: #aa9c9c;
     box-shadow: #222 1px 0 10px;
+  }
+
+  .table-responsive .dataTables_info{
+    text-align: center !important;
+    justify-content: center !important;
   }
 
   .table-responsiveProd{
@@ -97,6 +102,9 @@
       width: 10.5% ;
       height: 40% !important;
   
+    }
+    .card{
+      margin-left: 20% !important;
     }
   
   }

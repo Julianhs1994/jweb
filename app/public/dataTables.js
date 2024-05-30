@@ -1,6 +1,4 @@
 $(document).ready(function() {
-  //->destroy if exists:
-  
   //
     $('#tabla-datos').DataTable({
       serverSide: true, // Habilita el modo de procesamiento en el lado del servidor
@@ -335,6 +333,13 @@ $('#tabla-producto').on('click', '.editarProducto', async function(e) {
     let Array = res.array;
     $('#ModalEditProduct').modal('show');
     if ($('#ModalEditProduct').is(':visible')) {
+    //->Poner id en el hidden del modal:
+    if ($('#ModalEditProduct').is(':visible')) {
+      const inputHidden = document.getElementById('IdProductoEdit');
+      if(inputHidden){
+       inputHidden.value = valor
+      }
+    }    
     //->Array:
     const a = Array[0];
     //->Sacar variables del array:
