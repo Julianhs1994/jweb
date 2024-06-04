@@ -11,6 +11,24 @@ reg.addEventListener('submit', async (e) => {
   const password = document.getElementById('Password').value;
   const repeatpassword = document.getElementById('Repeatpassword').value;
 
+  if(name == '' || lastname == '' || address == '' || email == '' || phonenumber == '' || password == '' || repeatpassword == ''){
+    Swal.fire({
+      title: '¡Hola!',
+      text: 'Ningun campo debe estar vacio',
+      icon: 'error'
+  });
+  return
+  }
+
+  if(password != repeatpassword){
+    Swal.fire({
+      title: '¡Hola!',
+      text: 'La contraseña no coincide con el campo de repetir',
+      icon: 'error'
+  });
+  return
+  }
+
   const respuesta = await fetch(
     "api/register",
     {
