@@ -90,7 +90,8 @@
       
     }
     .table-responsiveProd table {
-      margin-left: 50px !important;
+      margin-left: 150px !important;
+      margin-right: 20% !important;
       width: 100% !important;
       table-layout: auto !important;
     }
@@ -104,13 +105,25 @@
   
     }
     .card{
-      margin-left: 20% !important;
+      margin-left:2.5% !important;
     }
     main h1{
       width: 100px !important;
       font-size: 80px !important;
     }
   
+  }
+
+  @media (max-width: 340px) {
+    .table-responsiveProd table img{
+      position: absolute;
+      width: 15% !important ;
+      height: 40% !important;
+  
+    }
+    .table-responsiveProd table {
+      margin-left: 250px !important;
+    }
   }
 
   @media (min-width: 768px) {
@@ -123,7 +136,7 @@
       height: 40% !important;
   
     }
-  
+    
 
   }
 
@@ -288,7 +301,7 @@
     padding: 0 !important;
   }
 
-  /* div contenedor tabla productos */
+  /* div contenedor tabla productos,puestos por js */
 
   .prod2{
     height: 600px;

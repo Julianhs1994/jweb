@@ -201,3 +201,66 @@ main{
 
 }
 
+@media (max-width: 340px) {
+  .navbarD{
+    width: 100%;
+    position: fixed !important;
+    top:5px ;
+    background-color: #333;
+    z-index: 1022
+  }
+  /*desplegable*/
+  .sidebar-sticky{
+    padding: 0;
+    background-color: #333;
+    height: 110px;
+    position: fixed;
+    top:0;
+    margin-top: calc(30% + 0.1%); /* ajusta el margin-top según la posición de .div2 */
+    width: 99%;
+    
+    z-index: 1021; /* para asegurarte de que esté sobre otros elementos */
+  }
+  .sidebar-stickyFixed{
+    padding: 0;
+    background-color: #333;
+    height: 110px;
+    position: fixed;
+    top:0;
+    margin-top: calc(15% + 0.1%); /* ajusta el margin-top según la posición de .div2 */
+    width: 99%;
+    
+    z-index: 1021; /* para asegurarte de que esté sobre otros elementos */
+  }
+  .sticky-top{
+    margin-top: 15%;
+    background-color: #333;
+  }
+  .navbarD .stuck {
+    width: 100%;
+    margin-top: 0 !important;
+    top: 0 !important; /* Margen ajustado al hacer scroll */
+  }
+
+  #sidebar{
+    height: 20px;
+  }
+  /*.stuck2{
+    background-color: #333;
+
+
+  }*/
+
+  /* para el fondo*/
+  .stuck3{
+    background-color: #333;
+    height: 110px;
+    position: fixed;
+    margin-top: 14% !important; /* ajusta el margin-top según la posición de .div2 */
+    width: 99%;
+    top: 0;
+    padding: 0 !important;  
+    /*z-index: 1021;  para asegurarte de que esté sobre otros elementos */
+
+  }
+}

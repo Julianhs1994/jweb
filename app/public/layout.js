@@ -97,3 +97,32 @@ $(document).ready(function() {
       }
     });
   });
+
+  //->sticky en responsive:
+
+  window.addEventListener('scroll', function() {
+    const stickyElement = document.querySelector('.navbarD');
+    const headerHeight = document.querySelector('header').offsetHeight;
+    //->desplegable:
+    const desp = document.getElementById('sidebar') //document.querySelector('.sidebar-sticky')
+    const desp2 = document.getElementById('sidebar2')
+  
+    if (window.scrollY > headerHeight) {
+      stickyElement.classList.add('stuck');
+      desp.classList.remove('sidebar-sticky')
+      //desp.classList.add('stuck2');
+      desp2.classList.remove('sidebar-sticky')
+      desp2.classList.add('sidebar-stickyFixed')
+      //->
+      stickyElement.classList.remove('sticky-top');
+    } else {
+      stickyElement.classList.remove('stuck');
+      //desp.classList.remove('stuck2');
+      //desp2.classList.remove('stuck3');
+      //
+      stickyElement.classList.add('sticky-top');
+      desp.classList.add('sidebar-sticky')
+      desp2.classList.remove('sidebar-stickyFixed')
+      desp2.classList.add('sidebar-sticky')
+    }
+  });
