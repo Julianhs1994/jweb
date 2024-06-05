@@ -61,7 +61,7 @@ $(document).ready(function() {
             width: '200px'
         }
     ],
-      "lengthMenu": [2, 3, 4, 5], // Cambiar opciones de paginación
+      "lengthMenu": false,/*[2, 3, 4, 5],*/ // Cambiar opciones de paginación
     
       ajax: {
         url: '/api/getAllCategoryData', // Ruta hacia tu función getAllUsers
@@ -114,7 +114,6 @@ $(document).ready(function() {
           className: 'classEliminar'
         }
     ],
-    //scrollX: true,
       "lengthMenu": [2, 3, 4, 5], // Cambiar opciones de paginación
       /*"lengthMenuCallback": function(settings) {
 
@@ -181,7 +180,7 @@ $(document).ready(function() {
         {
           data: 'IdProducto',
           render: function (data, type, row) {
-            return '<button type="submit" class="eliminarProducto" id="eliminarProducto" value="' + data + '">Eliminar</button>';
+            return '<button type="submit" class="eliminarProducto" id="eliminarProducto" value="' + data + '" data-idproducto="' + data + '">Eliminar</button>';
           }
         }  
       ]
@@ -391,3 +390,52 @@ if(EditarInModal){
     alert("yes")
   })
 }*/
+
+//->Eliminar PRODUCTO "onClick":
+$('#tabla-producto').on('click', '.eliminarProducto', async function() {
+  const btnEliminar = document.querySelectorAll('.eliminarProducto'); 
+  btnEliminar.forEach(btn => {     
+    // Obtener el valor del botón clickeado
+    let valorBoton = $(this).val();
+    btn.addEventListener('click',async function () {
+      Swal.fire({
+        title: '¿Estás seguro?',
+        text: "No podrás revertir esto!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, eliminar'
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          const IdProducto = valorBoton;
+          const response = await fetch("api/DeleteProduct",{
+            method:"POST",
+            headers:{
+              "Content-type":"application/json"
+            },
+            body:JSON.stringify({
+              IdProducto:IdProducto
+            })
+          })
+          const res = await response.json();
+          let icono = '';
+          if(res.status==200){
+            icono = 'success'
+          }else if(res.status==400){
+            icono= 'warning'
+          }else{
+            icono = 'question'
+          }
+          Swal.fire({
+            title: '¡Hola!',
+            text: res.message,
+            icon: icono
+          })
+          window.location.href = (res.redirect)
+          
+        }
+      })   
+    });
+  })
+})  

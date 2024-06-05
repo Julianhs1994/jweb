@@ -43,7 +43,7 @@ const upload = multer({ storage: storage });
 //->fs:
 //import { promises as fs } from "fs";
 import * as fs from "fs";
-import {stat} from "fs/promises"
+/*import {stat} from "fs/promises"*/
 
 //->Server:
 const app = express();
@@ -82,8 +82,6 @@ app.use(session({
   store: store,
 }));
 
-// Almacena la sesión en un lugar accesible globalmente
-//global.mySession = app.locals.session;
 //->Rutas:
 
 app.get("/",authorization.soloMain,async (req,res)=>{
@@ -158,6 +156,7 @@ app.post("/api/EditUser", users.editUser)
 app.post("/api/DeleteUser", users.deleteUser)
 app.post("/api/addCategory", Category.addCategory)
 app.post("/api/getAllProdPost", Product.getAllProductPost)
+app.post("/api/DeleteProduct", Product.deleteProduct)
 
 async function logOut(req, res, sinS) {
 
@@ -210,11 +209,6 @@ app.post("/api/logOut",async (req, res) => {
     }else{
       console.log("No se pudocerrar la session")
     }
-    /*
-    console.log(` / ${sessionId}`); // Imprimimos el identificador de sesión
-    console.log("||||||||||")*/
-    // Llamar a la función de autenticación para realizar el logout
-    //authentication.logOut(req, res);
   }
 });
 

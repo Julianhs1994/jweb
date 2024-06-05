@@ -92,9 +92,26 @@ async function editProduct(NombreEdit,DescripcionEdit,PrecioEdit,CantidadEdit,im
     }
 }
 
+async function deleteProduct(req,res){
+    const {connection,pool} = await getConnection();
+    try{
+        let IdProducto = req.body.IdProducto;
+        let sql = `DELETE FROM Producto WHERE IdProducto = ${IdProducto}`
+        const query = await connection.query(sql)
+        res.status(200).send({status:200,message:"Se ha eliminado el producto",redirect:"/admin-products"}) 
+    }catch(err){
+        console.error(err);
+        res.status(400).send({status:400,message:"Error al eliminar producto",redirect:"/admin-products"})
+    }
+    finally{
+        await pool.end()
+    }
+}
+
 export const methods = {
     addProduct,
     getAllProduct,
     getAllProductPost,
-    editProduct
+    editProduct,
+    deleteProduct
 }
