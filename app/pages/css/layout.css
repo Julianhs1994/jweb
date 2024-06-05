@@ -201,7 +201,7 @@ main{
 
 }
 
-@media (max-width: 360px) {
+@media (max-width: 361px) {
   .navbarD{
     width: 100%;
     position: fixed !important;
