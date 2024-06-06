@@ -114,7 +114,7 @@
   
   }
 
-  @media (max-width: 361px) {
+  @media (max-width: 360px) {
     .table-responsiveProd table img{
       position: absolute;
       width: 15% !important ;
@@ -124,12 +124,10 @@
     .table-responsiveProd table {
       margin-left: 250px !important;
     }
-    .card{
-      margin-left: 6% !important;
-    }
+    
   }
 
-  @media (min-width: 360px) and (max-width: 768px) {
+  @media (min-width: 361px) and (max-width: 768px) {
     .card{
       margin-left: 20% !important;
     }

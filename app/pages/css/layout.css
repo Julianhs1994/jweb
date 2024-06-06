@@ -265,7 +265,7 @@ main{
   }
 }
 
-@media (min-width: 360px) and (max-width: 768px) {
+@media (min-width: 361px) and (max-width: 768px) {
   /* Estilos para anchuras entre 360px y 768px */
   .navbarD{
     width: 100%;
