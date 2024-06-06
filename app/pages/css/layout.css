@@ -201,7 +201,7 @@ main{
 
 }
 
-@media (max-width: 361px) {
+@media (max-width: 360px) {
   .navbarD{
     width: 100%;
     position: fixed !important;
@@ -263,4 +263,48 @@ main{
     /*z-index: 1021;  para asegurarte de que esté sobre otros elementos */
 
   }
+}
+
+@media (min-width: 360px) and (max-width: 768px) {
+  /* Estilos para anchuras entre 360px y 768px */
+  .navbarD{
+    width: 100%;
+    position: fixed !important;
+    top: 90px ;
+    z-index: 1022
+  }
+  .sidebar-stickyFixed{
+    padding: 0;
+    background-color: #333;
+    height: 110px;
+    position: fixed;
+    top:0;
+    margin-top: calc(8% + 0.1%); /* ajusta el margin-top según la posición de .div2 */
+    width: 100%;
+    
+    z-index: 1021; /* para asegurarte de que esté sobre otros elementos */
+  }
+   .stuck {
+    width: 100%;
+    margin-top: 0 !important;
+    top: 0 !important; /* Margen ajustado al hacer scroll */
+  }
+  /*desplegable*/
+  .sidebar-sticky{
+    padding: 0;
+    background-color: #333;
+    height: 110px;
+    position: fixed;
+    top:0;
+    margin-top: calc(25% + 0.1%); /* ajusta el margin-top según la posición de .div2 */
+    width: 100%;
+    
+    z-index: 1021; /* para asegurarte de que esté sobre otros elementos */
+  }
+
+  /*fondo blanco*/
+  #sidebar{
+    height: 20px;
+  }
+  
 }

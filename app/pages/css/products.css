@@ -105,7 +105,7 @@
   
     }
     .card{
-      margin-left:2.5% !important;
+      margin-left: 5% !important;
     }
     main h1{
       width: 100px !important;
@@ -126,6 +126,12 @@
     }
     .card{
       margin-left: 6% !important;
+    }
+  }
+
+  @media (min-width: 360px) and (max-width: 768px) {
+    .card{
+      margin-left: 20% !important;
     }
   }
 
